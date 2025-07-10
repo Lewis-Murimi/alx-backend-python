@@ -3,18 +3,16 @@ import functools
 
 
 def with_db_connection(func):
-    """
-    Decorator that opens a DB connection and passes it to the function.
-    Automatically closes the connection after the function executes.
-    """
     @functools.wraps(func)
     def wrapper(*args, **kwargs):
-        conn = sqlite3.connect('users.db')
+        # make connection
+        conn = sqlite3.connect('user.db')
         try:
             result = func(conn, *args, **kwargs)
-            return result
+        # close connection
         finally:
             conn.close()
+        return result
     return wrapper
 
 
@@ -25,7 +23,6 @@ def get_user_by_id(conn, user_id):
     return cursor.fetchone()
 
 
-# 🔍 Test fetching user
-if __name__ == "__main__":
-    user = get_user_by_id(user_id=1)
-    print(user)
+# Fetch user by ID with automatic connection handling
+user = get_user_by_id(user_id=1)
+print(user)
