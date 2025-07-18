@@ -1,7 +1,7 @@
 from rest_framework import serializers
 from .models import User, Message, Conversation
 
-# Message Serializer
+
 class MessageSerializer(serializers.ModelSerializer):
     class Meta:
         model = Message
@@ -14,7 +14,7 @@ class MessageSerializer(serializers.ModelSerializer):
         ]
         read_only_fields = ['message_id', 'sent_at']
 
-# User Serializer
+
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
@@ -29,7 +29,7 @@ class UserSerializer(serializers.ModelSerializer):
         ]
         read_only_fields = ['user_id', 'created_at']
 
-# Conversation Serializer with Nested Messages and Participants
+
 class ConversationSerializer(serializers.ModelSerializer):
     participants = UserSerializer(many=True, read_only=True)
     messages = MessageSerializer(many=True, read_only=True)
@@ -44,10 +44,12 @@ class ConversationSerializer(serializers.ModelSerializer):
         ]
         read_only_fields = ['conversation_id', 'created_at']
 
-# Optional: Create Serializer for POST requests with participant IDs
+
 class ConversationCreateSerializer(serializers.ModelSerializer):
     participant_ids = serializers.PrimaryKeyRelatedField(
-        many=True, queryset=User.objects.all(), source='participants'
+        many=True,
+        queryset=User.objects.all(),
+        source='participants'
     )
 
     class Meta:
