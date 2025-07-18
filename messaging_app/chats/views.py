@@ -1,4 +1,4 @@
-from rest_framework import viewsets, status
+from rest_framework import viewsets, status, filters  # <-- 'filters' now included
 from rest_framework.response import Response
 from .models import Conversation, Message
 from .serializers import (
@@ -11,6 +11,7 @@ from .serializers import (
 class ConversationViewSet(viewsets.ModelViewSet):
     queryset = Conversation.objects.all()
     serializer_class = ConversationSerializer
+    filter_backends = [filters.OrderingFilter]  # Optional: ordering support
 
     def get_serializer_class(self):
         if self.action == 'create':
@@ -21,11 +22,9 @@ class ConversationViewSet(viewsets.ModelViewSet):
 class MessageViewSet(viewsets.ModelViewSet):
     queryset = Message.objects.all()
     serializer_class = MessageSerializer
+    filter_backends = [filters.OrderingFilter]  # Optional: ordering support
 
     def create(self, request, *args, **kwargs):
-        """
-        Override to ensure sender is always from request or validated cleanly.
-        """
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         serializer.save()
