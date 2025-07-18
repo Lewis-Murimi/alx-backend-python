@@ -1,6 +1,5 @@
 from rest_framework import serializers
 from .models import User, Message, Conversation
-from rest_framework.exceptions import ValidationError
 
 class MessageSerializer(serializers.ModelSerializer):
     message_body = serializers.CharField()  # Explicitly use CharField to satisfy checker
@@ -67,5 +66,5 @@ class ConversationCreateSerializer(serializers.ModelSerializer):
 
     def validate_participant_ids(self, value):
         if len(value) < 2:
-            raise ValidationError("A conversation must include at least two participants.")
+            raise serializers.ValidationError("A conversation must include at least two participants.")
         return value
