@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 """Unit tests for GithubOrgClient"""
+
 import unittest
 from unittest.mock import patch, PropertyMock
 
@@ -45,9 +46,9 @@ class TestGithubOrgClient(unittest.TestCase):
         test_url = "https://api.github.com/orgs/testorg/repos"
 
         with patch.object(
-                GithubOrgClient,
-                "_public_repos_url",
-                new_callable=PropertyMock
+            GithubOrgClient,
+            "_public_repos_url",
+            new_callable=PropertyMock
         ) as mock_public_repos_url:
             mock_public_repos_url.return_value = test_url
 
@@ -80,11 +81,11 @@ class TestGithubOrgClient(unittest.TestCase):
         self.assertEqual(result, expected)
 
 
+# Integration test values
 org_payload = {
     "login": "testorg",
     "repos_url": "https://api.github.com/orgs/testorg/repos"
 }
-
 
 repos_payload = [
     {"name": "repo1", "license": {"key": "apache-2.0"}},
@@ -110,7 +111,7 @@ class TestIntegrationGithubOrgClient(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         """Set up mock requests.get"""
-        cls.get_patcher = patch('client.get_json')
+        cls.get_patcher = patch("client.get_json")
         mock_get = cls.get_patcher.start()
 
         def side_effect(url):
@@ -134,5 +135,7 @@ class TestIntegrationGithubOrgClient(unittest.TestCase):
     def test_public_repos_with_license(self):
         """Test fetching repos with apache-2.0 license"""
         client = GithubOrgClient("testorg")
-        self.assertEqual(client.public_repos(license="apache-2.0"),
-                         self.apache2_repos)
+        self.assertEqual(
+            client.public_repos(license="apache-2.0"),
+            self.apache2_repos
+        )
