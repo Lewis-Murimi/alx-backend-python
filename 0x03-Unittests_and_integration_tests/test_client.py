@@ -6,6 +6,30 @@ from unittest.mock import patch, PropertyMock
 from parameterized import parameterized, parameterized_class
 from client import GithubOrgClient
 
+# Integration test values
+org_payload = {
+    "login": "testorg",
+    "repos_url": "https://api.github.com/orgs/testorg/repos"
+}
+
+repos_payload = [
+    {"name": "repo1", "license": {"key": "apache-2.0"}},
+    {"name": "repo2", "license": {"key": "mit"}},
+    {"name": "repo3", "license": {"key": "apache-2.0"}},
+]
+
+expected_repos = ["repo1", "repo2", "repo3"]
+apache2_repos = ["repo1", "repo3"]
+
+
+@parameterized_class([
+    {
+        "org_payload": org_payload,
+        "repos_payload": repos_payload,
+        "expected_repos": expected_repos,
+        "apache2_repos": apache2_repos
+    }
+])
 
 class TestGithubOrgClient(unittest.TestCase):
     """Test suite for GithubOrgClient"""
@@ -79,30 +103,6 @@ class TestGithubOrgClient(unittest.TestCase):
         self.assertEqual(result, expected)
 
 
-# Integration test values
-org_payload = {
-    "login": "testorg",
-    "repos_url": "https://api.github.com/orgs/testorg/repos"
-}
-
-repos_payload = [
-    {"name": "repo1", "license": {"key": "apache-2.0"}},
-    {"name": "repo2", "license": {"key": "mit"}},
-    {"name": "repo3", "license": {"key": "apache-2.0"}},
-]
-
-expected_repos = ["repo1", "repo2", "repo3"]
-apache2_repos = ["repo1", "repo3"]
-
-
-@parameterized_class([
-    {
-        "org_payload": org_payload,
-        "repos_payload": repos_payload,
-        "expected_repos": expected_repos,
-        "apache2_repos": apache2_repos
-    }
-])
 class TestIntegrationGithubOrgClient(unittest.TestCase):
     """Integration test class"""
 
