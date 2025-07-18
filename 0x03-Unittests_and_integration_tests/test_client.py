@@ -1,10 +1,11 @@
 #!/usr/bin/env python3
 """Unit tests for GithubOrgClient"""
 import unittest
-from unittest.mock import patch, PropertyMock, MagicMock
+from unittest.mock import patch, PropertyMock
+
 from parameterized import parameterized, parameterized_class
+
 from client import GithubOrgClient
-from fixtures import TEST_PAYLOAD
 
 
 class TestGithubOrgClient(unittest.TestCase):
@@ -109,16 +110,14 @@ class TestIntegrationGithubOrgClient(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         """Set up mock requests.get"""
-        cls.get_patcher = patch('requests.get')
+        cls.get_patcher = patch('client.get_json')
         mock_get = cls.get_patcher.start()
 
         def side_effect(url):
-            mock_resp = MagicMock()
             if url == "https://api.github.com/orgs/testorg":
-                mock_resp.json.return_value = cls.org_payload
+                return cls.org_payload
             elif url == cls.org_payload["repos_url"]:
-                mock_resp.json.return_value = cls.repos_payload
-            return mock_resp
+                return cls.repos_payload
 
         mock_get.side_effect = side_effect
 
