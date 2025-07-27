@@ -1,7 +1,11 @@
+from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import viewsets, status, filters  # <-- 'filters' now included
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
+
+from .filters import MessageFilter
 from .models import Conversation, Message
+from .pagination import MessagePagination
 from .permissions import IsParticipantOfConversation
 from .serializers import (
     ConversationSerializer,
@@ -24,10 +28,10 @@ class ConversationViewSet(viewsets.ModelViewSet):
 
 class MessageViewSet(viewsets.ModelViewSet):
     permission_classes = [IsAuthenticated,IsParticipantOfConversation]
-    queryset = Message.objects.all()
     serializer_class = MessageSerializer
-    filter_backends = [filters.OrderingFilter]  # Optional: ordering support
-
+    filter_backends = [DjangoFilterBackend]
+    filterset_class = MessageFilter
+    pagination_class = MessagePagination
     def get_queryset(self):
         conversation_id = self.kwargs.get('conversation_pk')  # ✅ Checker expects this name
         return Message.objects.filter(conversation_id=conversation_id)  # ✅
