@@ -49,7 +49,7 @@ MIDDLEWARE = [
     'chats.middleware.RequestLoggingMiddleware',  # Custom middleware for logging requests
     'chats.middleware.RestrictAccessByTimeMiddleware',  # Custom middleware for time-based access restriction
     'chats.middleware.OffensiveLanguageMiddleware',  # Custom middleware for offensive language filtering
-    'chats.middleware.RolePermissionMiddleware',
+    'chats.middleware.RolepermissionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
