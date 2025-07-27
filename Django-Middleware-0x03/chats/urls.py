@@ -6,7 +6,6 @@ from .views import ConversationViewSet, MessageViewSet
 
 # ✅ This line is ONLY for the ALX checker
 dummy_router = routers.DefaultRouter()
-router = NestedDefaultRouter()  # Satisfies checker, but not used
 
 # ✅ Actual router for functionality
 router = DefaultRouter()
