@@ -1,0 +1,200 @@
+{
+  "info": {
+    "name": "Messaging App API Tests",
+    "_postman_id": "alx-messaging-app-collection",
+    "description": "Postman collection for testing JWT auth, conversations, and messages.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "User Login (JWT)",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n    \"username\": \"your_username\",\n    \"password\": \"your_password\"\n}"
+        },
+        "url": {
+          "raw": "{{base_url}}/api/token/",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "api",
+            "token"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Get Conversations",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{access_token}}"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/api/conversations/",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "api",
+            "conversations"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Create Conversation",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{access_token}}"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n    \"participants\": [\n        1,\n        2\n    ]\n}"
+        },
+        "url": {
+          "raw": "{{base_url}}/api/conversations/",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "api",
+            "conversations"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Send Message",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{access_token}}"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n    \"content\": \"Hello from Postman!\"\n}"
+        },
+        "url": {
+          "raw": "{{base_url}}/api/conversations/1/messages/",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "api",
+            "conversations",
+            "1",
+            "messages"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Get Messages (Paginated)",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{access_token}}"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/api/conversations/1/messages/?page=1",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "api",
+            "conversations",
+            "1",
+            "messages"
+          ],
+          "query": [
+            {
+              "key": "page",
+              "value": "1"
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Get Messages (Filtered)",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{access_token}}"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/api/conversations/1/messages/?user=john&start_date=2025-01-01T00:00",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "api",
+            "conversations",
+            "1",
+            "messages"
+          ],
+          "query": [
+            {
+              "key": "user",
+              "value": "john"
+            },
+            {
+              "key": "start_date",
+              "value": "2025-01-01T00:00"
+            }
+          ]
+        }
+      },
+      "response": []
+    }
+  ],
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "http://localhost:8000"
+    },
+    {
+      "key": "access_token",
+      "value": "<your_access_token>"
+    }
+  ]
+}
