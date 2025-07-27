@@ -1,6 +1,7 @@
 from rest_framework import viewsets, status, filters  # <-- 'filters' now included
 from rest_framework.response import Response
 from .models import Conversation, Message
+from .permissions import IsParticipant
 from .serializers import (
     ConversationSerializer,
     ConversationCreateSerializer,
@@ -9,6 +10,7 @@ from .serializers import (
 
 
 class ConversationViewSet(viewsets.ModelViewSet):
+    permission_classes = [IsParticipant]
     queryset = Conversation.objects.all()
     serializer_class = ConversationSerializer
     filter_backends = [filters.OrderingFilter]  # Optional: ordering support
@@ -20,6 +22,7 @@ class ConversationViewSet(viewsets.ModelViewSet):
 
 
 class MessageViewSet(viewsets.ModelViewSet):
+    permission_classes = [IsParticipant]
     queryset = Message.objects.all()
     serializer_class = MessageSerializer
     filter_backends = [filters.OrderingFilter]  # Optional: ordering support
