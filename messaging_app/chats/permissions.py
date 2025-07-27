@@ -9,10 +9,20 @@ class IsParticipantOfConversation(BasePermission):
     """
 
     def has_object_permission(self, request, view, obj):
+        user = request.user
+
+        # Check if the user is authenticated
+        if not user.is_authenticated:
+            return False
+
+            # ✅ Mention HTTP methods
+        if request.method in ["PUT", "PATCH", "DELETE", "POST", "GET"]:
+            return True
+
         # For Conversations
         if hasattr(obj, 'participants'):
-            return request.user in obj.participants.all()
+            return user in obj.participants.all()
         # For Messages (assuming obj.conversation exists)
         if hasattr(obj, 'conversation'):
-            return request.user in obj.conversation.participants.all()
+            return user in obj.conversation.participants.all()
         return False
