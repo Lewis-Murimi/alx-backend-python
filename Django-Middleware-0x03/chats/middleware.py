@@ -5,7 +5,7 @@ import threading
 from collections import defaultdict
 from datetime import datetime, timedelta
 
-from django.http import HttpResponseForbidden
+from django.http import HttpResponseForbidden, JsonResponse
 
 
 class RequestLoggingMiddleware:
@@ -71,3 +71,22 @@ class OffensiveLanguageMiddleware:
         if x_forwarded_for:
             return x_forwarded_for.split(',')[0]
         return request.META.get('REMOTE_ADDR')
+
+class RolePermissionMiddleware:
+    def __init__(self, get_response):
+        self.get_response = get_response
+
+    def __call__(self, request):
+        # Only apply to specific restricted endpoints, e.g. message creation/deletion
+        restricted_paths = ["/api/messages/", "/api/conversations/"]
+        restricted_methods = ["POST", "PUT", "DELETE"]
+
+        if request.path in restricted_paths and request.method in restricted_methods:
+            if not request.user.is_authenticated:
+                return JsonResponse({"error": "Authentication required"}, status=401)
+
+            user_role = getattr(request.user, 'role', None)
+            if user_role not in ['admin', 'moderator']:
+                return JsonResponse({"error": "Forbidden: insufficient role permissions"}, status=403)
+
+        return self.get_response(request)
