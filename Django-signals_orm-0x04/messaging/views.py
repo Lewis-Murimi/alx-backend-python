@@ -3,6 +3,7 @@ from django.contrib.auth.decorators import login_required
 from django.db.models import Prefetch
 from django.http import JsonResponse
 from django.shortcuts import render
+from django.views.decorators.cache import cache_page
 from django.views.decorators.csrf import csrf_exempt
 
 from .models import Message
@@ -19,7 +20,9 @@ def delete_user(request):
         return JsonResponse({'message': 'Your account and related data have been deleted.'})
     return JsonResponse({'error': 'Invalid request'}, status=400)
 
+@csrf_exempt
 @login_required
+@cache_page(60)
 def inbox(request):
     # Filter messages where the user is sender or receiver
     messages = Message.objects.filter(
