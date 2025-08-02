@@ -1,5 +1,5 @@
 """
-URL configuration for Django-signals_orm_0x04 project.
+URL configuration for Django-signals_orm-0x04 project.
 
 The `urlpatterns` list routes URLs to views. For more information please see:
     https://docs.djangoproject.com/en/5.2/topics/http/urls/
