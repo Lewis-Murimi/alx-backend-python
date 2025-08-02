@@ -8,8 +8,21 @@ class Message(models.Model):
     timestamp = models.DateTimeField(auto_now_add=True)
     edited = models.BooleanField(default=False)
 
+    # Self-referential FK to enable threading (replies)
+    parent_message = models.ForeignKey(
+        'self',
+        null=True,
+        blank=True,
+        related_name='replies',
+        on_delete=models.CASCADE
+    )
+
     def __str__(self):
         return f'From {self.sender} to {self.receiver} at {self.timestamp}'
+
+    @property
+    def is_reply(self):
+        return self.parent_message is not None
 
 class Notification(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
