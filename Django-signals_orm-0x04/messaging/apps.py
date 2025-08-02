@@ -6,4 +6,4 @@ class MessagingConfig(AppConfig):
     name = 'messaging'
 
     def ready(self):
-        import messaging.signals
+        import messaging.signals  # Import signals to ensure they are registered
