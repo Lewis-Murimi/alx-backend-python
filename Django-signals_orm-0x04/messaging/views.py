@@ -55,3 +55,8 @@ def threaded_message_view(request, message_id):
     }
 
     return render(request, 'messaging/threaded_message.html', {'thread': thread_data})
+
+@login_required
+def unread_messages_view(request):
+    unread_messages = Message.read.for_user(request.user).select_related('sender')
+    return render(request, 'messaging/unread.html', {'messages': unread_messages})
