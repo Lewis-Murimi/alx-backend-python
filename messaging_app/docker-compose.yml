@@ -3,6 +3,11 @@ services:
     image: mysql:8.0
     container_name: messaging_db
     restart: always
+    environment:
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
     env_file:
       - .env
     ports:
@@ -14,9 +19,9 @@ services:
     build: .
     container_name: messaging_web
     restart: always
+    command: python3 manage.py runserver 0.0.0.0:8000
     env_file:
       - .env
-    command: python manage.py runserver 0.0.0.0:8000
     volumes:
       - .:/app
     ports:
