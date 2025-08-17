@@ -1,0 +1,25 @@
+#!/bin/bash
+# kubctl-0x03
+# Rolling update script for blue deployment
+
+set -e
+
+echo "🚀 Applying rolling update..."
+kubectl apply -f blue_deployment.yaml
+
+echo "⏳ Monitoring rollout status..."
+kubectl rollout status deployment/messaging-app-blue
+
+echo "🔄 Running continuous requests with curl to check for downtime..."
+SERVICE_IP=$(minikube service messaging-app-service --url)
+
+# Run curl in a loop for 15 requests
+for i in {1..15}
+do
+  RESPONSE=$(curl -s -o /dev/null -w "%{http_code}" $SERVICE_IP)
+  echo "Request $i -> HTTP $RESPONSE"
+  sleep 2
+done
+
+echo "✅ Rolling update complete. Current pods:"
+kubectl get pods -l app=messaging-app,version=blue -o wide

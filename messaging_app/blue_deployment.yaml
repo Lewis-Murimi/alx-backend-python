@@ -11,6 +11,11 @@ spec:
     matchLabels:
       app: messaging-app
       version: blue
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 1   # ensures at least one pod always runs
+      maxSurge: 1         # creates one extra pod during update
   template:
     metadata:
       labels:
@@ -19,7 +24,7 @@ spec:
     spec:
       containers:
       - name: messaging-app
-        image: lewismurimi/messaging_app_image:blue   # <-- tag as blue
+        image: lewismurimi/messaging_app_image:2.0   # <-- updated version
         ports:
         - containerPort: 8000
         env:
