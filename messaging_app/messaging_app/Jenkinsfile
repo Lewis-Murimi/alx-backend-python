@@ -8,22 +8,19 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                git(
-                    url: 'https://github.com/your-username/messaging-app.git',
-                    branch: 'main',
+                git branch: 'main',
+                    url: 'https://github.com/Lewis-Murimi/alx-backend-python.git',
                     credentialsId: 'github-creds'
-                )
             }
         }
 
         stage('Set up Python') {
             steps {
-                // ShiningPanda creates a Python virtualenv
                 sh '''
                 python3 -m venv ${VENV_DIR}
                 . ${VENV_DIR}/bin/activate
-                pip install --upgrade pip
-                pip install -r requirements.txt
+                pip3 install --upgrade pip
+                pip3 install -r messaging_app/requirements.txt
                 '''
             }
         }
