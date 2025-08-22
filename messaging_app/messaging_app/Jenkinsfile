@@ -5,6 +5,11 @@ pipeline {
         VENV_DIR = "venv"
     }
 
+    triggers {
+        // Poll repo every 5 minutes
+        pollSCM('H/5 * * * *')
+    }
+
     stages {
         stage('Checkout') {
             steps {
@@ -38,9 +43,5 @@ pipeline {
                 }
             }
         }
-    }
-
-    triggers {
-        // Manual trigger only
     }
 }
